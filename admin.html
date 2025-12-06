@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% block content %}
+<h3>Admin Dashboard</h3>
+
+<section class="mb-4">
+  <h5>Users</h5>
+  <table class="table table-sm">
+    <thead><tr><th>ID</th><th>Username</th><th>Role</th></tr></thead>
+    <tbody>
+      {% for u in users %}
+      <tr><td>{{ u['id'] }}</td><td>{{ u['username'] }}</td><td>{{ u['role'] }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section class="mb-4">
+  <h5>Events</h5>
+  <form method="post" action="{{ url_for('admin_add_event') }}" class="row g-2 align-items-center mb-3">
+    <div class="col-auto"><input name="name" class="form-control" placeholder="Event name" required></div>
+    <div class="col-auto"><input name="date" class="form-control" placeholder="Date"></div>
+    <div class="col-auto"><input name="venue" class="form-control" placeholder="Venue"></div>
+    <div class="col-auto"><button class="btn btn-success">Add</button></div>
+  </form>
+
+  <table class="table table-sm">
+    <thead><tr><th>ID</th><th>Name</th><th>Date</th><th>Venue</th><th>Action</th></tr></thead>
+    <tbody>
+      {% for e in events %}
+      <tr>
+        <td>{{ e['id'] }}</td><td>{{ e['name'] }}</td><td>{{ e['date'] }}</td><td>{{ e['venue'] }}</td>
+        <td>
+          <form method="post" action="{{ url_for('admin_delete_event', event_id=e['id']) }}" style="display:inline">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h5>Registrations</h5>
+  <table class="table table-sm">
+    <thead><tr><th>ID</th><th>Event</th><th>User</th><th>Email</th><th>Year</th><th>Branch</th><th>Date</th><th>Certificate</th></tr></thead>
+    <tbody>
+      {% for r in registrations %}
+      <tr>
+        <td>{{ r['id'] }}</td><td>{{ r['event'] }}</td><td>{{ r['username'] }}</td><td>{{ r['email'] }}</td>
+        <td>{{ r['year'] }}</td><td>{{ r['branch'] }}</td><td>{{ r['created_at'][:10] }}</td>
+        <td><a class="btn btn-sm btn-primary" href="{{ url_for('certificate', registration_id=r['id']) }}">Download</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+{% endblock %}
